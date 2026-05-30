@@ -1,2 +1,0 @@
-# Budget-pp
-Budget App
