@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Pocket Budget" />
+  <meta name="theme-color" content="#0f3d3e" />
+  <meta
+    name="description"
+    content="A bookmark-friendly budgeting app for iPhone with monthly planning, category tracking, quick transactions, and local backups."
+  />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <title>Pocket Budget</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <main class="shell">
+    <section class="hero card">
+      <div class="eyebrow">Built for quick iPhone check-ins</div>
+      <div class="hero-copy">
+        <div>
+          <h1>Pocket Budget</h1>
+          <p>
+            Plan the month, log spending fast, and keep a clean view of what is safe
+            to spend next.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button class="ghost-button" id="jumpToTransaction" type="button">Add transaction</button>
+          <button class="ghost-button" id="jumpToPlan" type="button">Edit budget</button>
+        </div>
+      </div>
+      <div class="hero-grid">
+        <label class="field compact-field">
+          <span>Month</span>
+          <input id="monthPicker" type="month" />
+        </label>
+        <div class="hero-install">
+          Add this page to your iPhone home screen from Safari's Share menu for an app-like experience.
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-grid" id="summaryCards"></section>
+
+    <section class="layout">
+      <div class="main-column">
+        <section class="card panel">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">Monthly dashboard</div>
+              <h2>Where your money is going</h2>
+            </div>
+            <div class="chip" id="healthChip">Balanced month</div>
+          </div>
+          <div id="budgetStatusBanner" class="status-banner" aria-live="polite"></div>
+          <div id="insights" class="insights-grid"></div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Category progress</h3>
+              <span id="budgetCoverageLabel">0% budget used</span>
+            </div>
+            <div id="categoryProgress" class="category-progress"></div>
+          </div>
+        </section>
+
+        <section class="card panel" id="planSection">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">Plan</div>
+              <h2>Monthly budget setup</h2>
+            </div>
+          </div>
+
+          <form id="planForm" class="form-grid">
+            <label class="field">
+              <span>Planned income</span>
+              <input id="plannedIncome" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
+            </label>
+            <label class="field">
+              <span>Starting balance</span>
+              <input id="startingBalance" type="number" inputmode="decimal" step="0.01" placeholder="0.00" />
+            </label>
+            <label class="field">
+              <span>Savings goal</span>
+              <input id="savingsGoal" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
+            </label>
+            <div class="field action-field">
+              <span>&nbsp;</span>
+              <button class="primary-button" type="submit">Save monthly plan</button>
+            </div>
+          </form>
+
+          <div class="subsection-header">
+            <h3>Category budgets</h3>
+            <p>Set a target for each category you want to control this month.</p>
+          </div>
+          <form id="budgetForm" class="budget-grid"></form>
+
+          <div class="subsection-header">
+            <h3>Add a category</h3>
+            <p>Add as many custom categories as you want. They show up in both the budget editor and transaction form.</p>
+          </div>
+          <form id="categoryForm" class="inline-form">
+            <label class="field">
+              <span>Name</span>
+              <input id="categoryName" type="text" maxlength="40" placeholder="Pets, Travel, Gifts..." />
+            </label>
+            <label class="field">
+              <span>Accent color</span>
+              <input id="categoryColor" type="color" value="#ef7d57" />
+            </label>
+            <div class="field action-field">
+              <span>&nbsp;</span>
+              <button class="secondary-button" type="submit">Add category</button>
+            </div>
+          </form>
+          <div id="customCategoryList" class="category-pill-list"></div>
+        </section>
+      </div>
+
+      <aside class="side-column">
+        <section class="card panel" id="transactionSection">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">Capture spending</div>
+              <h2>New transaction</h2>
+            </div>
+          </div>
+
+          <form id="transactionForm" class="transaction-form">
+            <div id="transactionModeBanner" class="status-banner"></div>
+            <label class="field">
+              <span>Type</span>
+              <select id="transactionType">
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Amount</span>
+              <input id="transactionAmount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required />
+            </label>
+            <label class="field">
+              <span>Category</span>
+              <select id="transactionCategory"></select>
+            </label>
+            <label class="field">
+              <span>Date</span>
+              <input id="transactionDate" type="date" required />
+            </label>
+            <label class="field">
+              <span>Note</span>
+              <input id="transactionNote" type="text" maxlength="60" placeholder="Coffee, rent, freelance..." />
+            </label>
+            <div class="button-cluster">
+              <button class="primary-button" id="transactionSubmitButton" type="submit">Save transaction</button>
+              <button class="ghost-button" id="cancelTransactionEdit" type="button" hidden>Cancel edit</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card panel">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">Recent activity</div>
+              <h2>Transactions</h2>
+            </div>
+          </div>
+          <div id="transactionList" class="transaction-list"></div>
+        </section>
+
+        <section class="card panel">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">Backup</div>
+              <h2>Keep your data safe</h2>
+            </div>
+          </div>
+          <div class="backup-actions">
+            <button class="secondary-button" id="exportButton" type="button">Export data</button>
+            <label class="secondary-button file-button">
+              Import data
+              <input id="importInput" type="file" accept="application/json" />
+            </label>
+            <button class="danger-button" id="resetButton" type="button">Reset app</button>
+          </div>
+          <p class="footnote">
+            Everything is saved in your browser using local storage, so exporting a backup is a good habit before switching phones.
+          </p>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <template id="summaryCardTemplate">
+    <article class="summary-card reveal">
+      <span class="summary-label"></span>
+      <strong class="summary-value"></strong>
+      <small class="summary-note"></small>
+    </article>
+  </template>
+
+  <template id="insightTemplate">
+    <article class="insight-card reveal">
+      <span class="insight-label"></span>
+      <strong class="insight-value"></strong>
+      <p class="insight-note"></p>
+    </article>
+  </template>
+
+  <template id="progressTemplate">
+    <article class="progress-card reveal">
+      <div class="progress-topline">
+        <div class="progress-title-wrap">
+          <span class="progress-dot"></span>
+          <strong class="progress-title"></strong>
+        </div>
+        <span class="progress-values"></span>
+      </div>
+      <div class="progress-rail">
+        <div class="progress-fill"></div>
+      </div>
+    </article>
+  </template>
+
+  <template id="transactionTemplate">
+    <article class="transaction-item reveal">
+      <div class="transaction-text">
+        <div class="transaction-row">
+          <strong class="transaction-note"></strong>
+          <span class="transaction-amount"></span>
+        </div>
+        <div class="transaction-meta"></div>
+      </div>
+      <div class="transaction-actions">
+        <button class="icon-button edit-transaction" type="button" aria-label="Edit transaction">Edit</button>
+        <button class="icon-button delete-transaction" type="button" aria-label="Delete transaction">Delete</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="./app.js"></script>
+</body>
+</html>
