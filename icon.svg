@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Pocket Budget icon">
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f3d3e" />
+      <stop offset="100%" stop-color="#1d5c5d" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef7d57" />
+      <stop offset="100%" stop-color="#ffb26f" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="62" fill="url(#bg)" />
+  <path d="M56 84c0-15.464 12.536-28 28-28h88c15.464 0 28 12.536 28 28v88c0 15.464-12.536 28-28 28H84c-15.464 0-28-12.536-28-28V84z" fill="#fff7ef" opacity=".96"/>
+  <path d="M78 106h100" stroke="#d6d0c8" stroke-width="12" stroke-linecap="round"/>
+  <path d="M78 150h54" stroke="#d6d0c8" stroke-width="12" stroke-linecap="round"/>
+  <path d="M154 132c0-11.046 8.954-20 20-20h4c11.046 0 20 8.954 20 20v22c0 11.046-8.954 20-20 20h-4c-11.046 0-20-8.954-20-20v-22z" fill="url(#accent)"/>
+  <path d="M172 143h8" stroke="#fff7ef" stroke-width="8" stroke-linecap="round"/>
+</svg>
